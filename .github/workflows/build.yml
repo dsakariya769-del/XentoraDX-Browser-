@@ -19,31 +19,59 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Files ko sahi Android structure mein automatic move karne ke liye step
-    - name: Organize Project Files
+    # Yeh step purani sabhi bikhri hui files ko automatic saaf karke ek perfect structure banayega
+    - name: Force Clean & Fix Project Structure
       run: |
+        rm -rf app settings.gradle build.gradle
         mkdir -p app/src/main/java/com/xentoradx/browser
-        mv build.gradle app/
-        mv AndroidManifest.xml app/src/main/
-        mv MainActivity.java app/src/main/java/com/xentoradx/browser/
+        
+        # 1. Main settings.gradle create karna
+        echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }" > settings.gradle
+        echo "rootProject.name = 'XentoraDX-Browser'" >> settings.gradle
+        echo "include ':app'" >> settings.gradle
+        
+        # 2. Main root build.gradle create karna
+        echo "plugins { id 'com.android.application' version '8.2.0' apply false }" > build.gradle
+        
+        # 3. Module app/build.gradle create karna
+        cat << 'EOF' > app/build.gradle
+        plugins {
+            id 'com.android.application'
+        }
+        android {
+            namespace 'com.xentoradx.browser'
+            compileSdk 34
+            defaultConfig {
+                applicationId "com.xentoradx.browser"
+                minSdk 21
+                targetSdk 34
+                versionCode 1
+                versionName "1.0"
+            }
+            buildTypes {
+                release {
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+            }
+        }
+        EOF
+
+        # 4. Aapki files ko sahi jagah move karna
+        if [ -f "AndroidManifest.xml" ]; then mv AndroidManifest.xml app/src/main/; fi
+        if [ -f "MainActivity.java" ]; then mv MainActivity.java app/src/main/java/com/xentoradx/browser/; fi
 
     - name: Initialize Gradle Wrapper
       run: gradle wrapper --gradle-version 8.2
 
     - name: Build APK (Debug)
-      run: ./gradlew assembleDebug
+      run: ./gradlew :app:assembleDebug
 
     - name: Build AAB (Release)
-      run: ./gradlew bundleRelease
+      run: ./gradlew :app:bundleRelease
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: XentoraDX-APK
         path: app/build/outputs/apk/debug/app-debug.apk
-
-    - name: Upload AAB (Play Store ke liye)
-      uses: actions/upload-artifact@v4
-      with:
-        name: XentoraDX-AAB
-        path: app/build/outputs/bundle/release/app-release.aab
