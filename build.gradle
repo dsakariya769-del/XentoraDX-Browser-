@@ -1,23 +1,10 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.application' version '8.2.0' apply false
 }
 
-android {
-    namespace 'com.xentoradx.browser'
-    compileSdk 34
-
-    defaultConfig {
-        applicationId "com.xentoradx.browser"
-        minSdk 21
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+subprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }
