@@ -4,6 +4,12 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.graphics.Color;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,29 +19,52 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        // WebView ko layout se connect karna
-        myWebView = findViewById(R.id.webView);
+        // 1. Main Layout Banana (Bina XML file ke)
+        LinearLayout mainLayout = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLayout.setBackgroundColor(Color.parseColor("#121212"));
+
+        // 2. Custom Top Bar / Header Banana
+        LinearLayout topBar = new LinearLayout(this);
+        topBar.setOrientation(LinearLayout.HORIZONTAL);
+        topBar.setBackgroundColor(Color.parseColor("#1F1F1F"));
+        topBar.setPadding(40, 30, 40, 30);
+        topBar.setGravity(Gravity.CENTER_VERTICAL);
+
+        // Header Mein Naam Add Karna
+        TextView titleTextView = new TextView(this);
+        titleTextView.setText("XentoraDX");
+        titleTextView.setTextColor(Color.WHITE);
+        titleTextView.setTextSize(20);
+        titleTextView.setTypeface(null, android.graphics.Typeface.BOLD);
         
-        // WebSettings configure karna taaki Google properly chale
+        topBar.addView(titleTextView);
+        mainLayout.addView(topBar, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // 3. Browser (WebView) Create Karna
+        myWebView = new WebView(this);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
 
-        // Links ko app ke andar hi kholne ke liye
         myWebView.setWebViewClient(new WebViewClient());
-
-        // Jab app khule toh sabse pehle Google load ho
         myWebView.loadUrl("https://www.google.com");
+
+        LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        mainLayout.addView(myWebView, webViewParams);
+
+        // Screen Par Layout Set Karna
+        setContentView(mainLayout);
     }
 
-    // Back button dabane par browser page peeche jaye, app band na ho
     @Override
     public void onBackPressed() {
-        if (myWebView.canGoBack()) {
+        if (myWebView != null && myWebView.canGoBack()) {
             myWebView.goBack();
         } else {
             super.onBackPressed();
