@@ -19,10 +19,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Repositories aur Android core dependencies dono ko handle karne ke liye step
+    # Project structure fix karne aur AndroidX support on karne ka step
     - name: Setup Dynamic Repositories & Fix Structure
       run: |
-        rm -rf app settings.gradle build.gradle
+        rm -rf app settings.gradle build.gradle gradle.properties
         mkdir -p app/src/main/java/com/xentoradx/browser
         
         # 1. Complete settings.gradle
@@ -52,7 +52,13 @@ jobs:
         }
         EOF
         
-        # 3. App module build.gradle WITH APPCOMPAT DEPENDENCY
+        # 3. Puraane code ko naye AndroidX mein automatic convert karne ke liye properties file
+        cat << 'EOF' > gradle.properties
+        android.useAndroidX=true
+        android.enableJetifier=true
+        EOF
+        
+        # 4. App module build.gradle
         cat << 'EOF' > app/build.gradle
         plugins {
             id 'com.android.application'
@@ -80,7 +86,7 @@ jobs:
         }
         EOF
 
-        # 4. Files ko sahi safe paths par move karna
+        # 5. Files ko sahi safe paths par move karna
         if [ -f "AndroidManifest.xml" ]; then mv AndroidManifest.xml app/src/main/; fi
         if [ -f "MainActivity.java" ]; then mv MainActivity.java app/src/main/java/com/xentoradx/browser/; fi
 
