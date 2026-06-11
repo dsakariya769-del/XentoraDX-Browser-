@@ -19,21 +19,40 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Yeh step purani sabhi bikhri hui files ko automatic saaf karke ek perfect structure banayega
-    - name: Force Clean & Fix Project Structure
+    # Yeh step repositories ki problem ko jad se khatam karega
+    - name: Setup Dynamic Repositories & Fix Structure
       run: |
         rm -rf app settings.gradle build.gradle
         mkdir -p app/src/main/java/com/xentoradx/browser
         
-        # 1. Main settings.gradle create karna
-        echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }" > settings.gradle
-        echo "rootProject.name = 'XentoraDX-Browser'" >> settings.gradle
-        echo "include ':app'" >> settings.gradle
+        # 1. Complete settings.gradle with repositories
+        cat << 'EOF' > settings.gradle
+        pluginManagement {
+            repositories {
+                google()
+                mavenCentral()
+                gradlePluginPortal()
+            }
+        }
+        dependencyResolutionManagement {
+            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+            repositories {
+                google()
+                mavenCentral()
+            }
+        }
+        rootProject.name = "XentoraDX-Browser"
+        include ':app'
+        EOF
         
-        # 2. Main root build.gradle create karna
-        echo "plugins { id 'com.android.application' version '8.2.0' apply false }" > build.gradle
+        # 2. Main root build.gradle
+        cat << 'EOF' > build.gradle
+        plugins {
+            id 'com.android.application' version '8.2.0' apply false
+        }
+        EOF
         
-        # 3. Module app/build.gradle create karna
+        # 3. App module build.gradle
         cat << 'EOF' > app/build.gradle
         plugins {
             id 'com.android.application'
@@ -57,7 +76,7 @@ jobs:
         }
         EOF
 
-        # 4. Aapki files ko sahi jagah move karna
+        # 4. Files ko sahi safe paths par move karna
         if [ -f "AndroidManifest.xml" ]; then mv AndroidManifest.xml app/src/main/; fi
         if [ -f "MainActivity.java" ]; then mv MainActivity.java app/src/main/java/com/xentoradx/browser/; fi
 
@@ -67,10 +86,7 @@ jobs:
     - name: Build APK (Debug)
       run: ./gradlew :app:assembleDebug
 
-    - name: Build AAB (Release)
-      run: ./gradlew :app:bundleRelease
-
-    - name: Upload APK
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: XentoraDX-APK
