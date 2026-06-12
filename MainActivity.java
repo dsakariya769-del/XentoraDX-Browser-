@@ -23,66 +23,68 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Root Layout (Ekdam Dark Jaisa Photo Mein Hai)
+        // 1. Root Layout (Deep Premium Dark Background)
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.setBackgroundColor(Color.parseColor("#03070B")); 
+        mainLayout.setBackgroundColor(Color.parseColor("#020609")); 
 
-        // 2. SAME-TO-SAME TOP BAR
+        // 2. EXACT TOP BAR (Sleek Space Between)
         LinearLayout topBar = new LinearLayout(this);
         topBar.setOrientation(LinearLayout.HORIZONTAL);
-        topBar.setPadding(40, 40, 40, 40);
+        topBar.setPadding(45, 50, 45, 30);
         topBar.setGravity(Gravity.CENTER_VERTICAL);
 
-        // Logo Text (XentoraDX)
+        // Brand Text (Neon Cyan Logo Typeface)
         TextView brandText = new TextView(this);
         brandText.setText("✕ XentoraDX");
-        brandText.setTextColor(Color.parseColor("#40E0D0")); // Neon Cyan/Turquoise
+        brandText.setTextColor(Color.parseColor("#4DEEEA")); 
         brandText.setTextSize(22);
         brandText.setTypeface(null, android.graphics.Typeface.BOLD);
         LinearLayout.LayoutParams brandParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         brandText.setLayoutParams(brandParams);
         topBar.addView(brandText);
 
-        // Top Right Icons: Search, Mic, Scanner (Bina VPN ke)
-        TextView iconSearch = createTopIcon("🔍");
-        TextView iconMic = createTopIcon("🎙️");
-        TextView iconScan = createTopIcon("🔲");
-        topBar.addView(iconSearch);
-        topBar.addView(iconMic);
-        topBar.addView(iconScan);
+        // Action Icons Layout
+        LinearLayout topIconsLayout = new LinearLayout(this);
+        topIconsLayout.setOrientation(LinearLayout.HORIZONTAL);
+        topIconsLayout.setGravity(Gravity.END);
+        
+        // Exact Unicode Shapes representing Vector Glyphs for Search, Mic, Scan
+        topIconsLayout.addView(createTopIcon("⌕")); // Sleek Minimal Search Vector Outline
+        topIconsLayout.addView(createTopIcon("SC")); 
+        topIconsLayout.addView(createTopIcon("⚃"));  // Scanner Outline Graphic Object
 
+        topBar.addView(topIconsLayout);
         mainLayout.addView(topBar);
 
-        // 3. HOME SCREEN CONTENT (Scrollable ya Fixed Frame)
+        // 3. CLEAN CONTENT FRAME
         homeScreenLayout = new LinearLayout(this);
         homeScreenLayout.setOrientation(LinearLayout.VERTICAL);
-        homeScreenLayout.setPadding(40, 60, 40, 40);
-        homeScreenLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        homeScreenLayout.setPadding(40, 80, 40, 40);
+        homeScreenLayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         LinearLayout.LayoutParams homeParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
         homeScreenLayout.setLayoutParams(homeParams);
 
-        // Apps Ka Grid Layout (3 Columns - Jaisa Screenshot Mein Hain)
+        // Grid Design - Exactly 3 Columns as shown in image reference
         GridLayout appsGrid = new GridLayout(this);
         appsGrid.setColumnCount(3);
-        appsGrid.setRowCount(3);
-        appsGrid.setAlignmentMode(GridLayout.ALIGN_BOUNDS);
-        appsGrid.setUseDefaultMargins(true);
+        appsGrid.setUseDefaultMargins(false);
+        appsGrid.setGravity(Gravity.CENTER);
 
-        // Saare Apps Jodna (Bina Games aur Anime ke)
-        addAppIcon(appsGrid, "▶️", "YouTube", "https://www.youtube.com");
-        addAppIcon(appsGrid, "🤖", "ChatGPT", "https://chatgpt.com");
-        addAppIcon(appsGrid, "🌐", "News", "https://news.google.com");
-        addAppIcon(appsGrid, "📸", "Instagram", "https://www.instagram.com");
-        addAppIcon(appsGrid, "🔷", "Facebook", "https://www.facebook.com");
-        addAppIcon(appsGrid, "✕", "X", "https://x.com");
-        addAppIcon(appsGrid, "📌", "Pinterest", "https://www.pinterest.com");
+        // Grid Content Construction
+        addAppIcon(appsGrid, "▶", "YouTube", "https://www.youtube.com", "#FF0000");
+        addAppIcon(appsGrid, "❖", "ChatGPT", "https://chatgpt.com", "#10A37F");
+        addAppIcon(appsGrid, "G", "News", "https://news.google.com", "#4285F4");
+        addAppIcon(appsGrid, "🌐", "Instagram", "https://www.instagram.com", "#E1306C");
+        addAppIcon(appsGrid, "f", "Facebook", "https://www.facebook.com", "#1877F2");
+        addAppIcon(appsGrid, "𝕏", "X", "https://x.com", "#FFFFFF");
+        addAppIcon(appsGrid, "🌐", "Pinterest", "https://www.pinterest.com", "#BD081C");
 
         homeScreenLayout.addView(appsGrid);
         mainLayout.addView(homeScreenLayout);
 
-        // 4. WEBVIEW (Shuruat mein hidden rahega, jab click karenge tabhi khulega)
+        // 4. WEBVIEW CONTROLLER
         myWebView = new WebView(this);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -90,23 +92,23 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
         myWebView.setWebViewClient(new WebViewClient());
-        myWebView.setVisibility(View.GONE); // Pehle mukhya screen dikhegi
+        myWebView.setVisibility(View.GONE);
         mainLayout.addView(myWebView, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f));
 
-        // 5. SAME-TO-SAME BOTTOM NAVIGATION BAR
+        // 5. SCREEN-MATCH BOTTOM NAVIGATION BAR
         LinearLayout bottomBar = new LinearLayout(this);
         bottomBar.setOrientation(LinearLayout.HORIZONTAL);
-        bottomBar.setBackgroundColor(Color.parseColor("#03070B"));
-        bottomBar.setPadding(10, 30, 10, 30);
-        bottomBar.setGravity(Gravity.CENTER);
+        bottomBar.setBackgroundColor(Color.parseColor("#020609"));
+        bottomBar.setPadding(10, 40, 10, 40);
+        bottomBar.setGravity(Gravity.CENTER_VERTICAL);
 
-        // Naye wale custom buttons jaisa aapne bataya
-        TextView btnHistory = createNavButton("🕒", "#40E0D0");
-        TextView btnAddTab = createNavButton("＋", "#40E0D0");
-        TextView btnHome = createNavButton("⌂", "#40E0D0");
-        TextView btnTabs = createNavButton("🔲", "#40E0D0");
-        TextView btnDX = createNavButton("DX", "#40E0D0");
+        // Structured Layout Buttons matching exact image requirements
+        TextView btnHistory = createNavButton("🕒", "#4DEEEA");
+        TextView btnAddTab = createNavButton("＋", "#4DEEEA");
+        TextView btnHome = createNavButton("⌂", "#4DEEEA");
+        TextView btnTabs = createNavButton("⧉", "#4DEEEA");
+        TextView btnDX = createNavButton("DX", "#4DEEEA");
         btnDX.setTypeface(null, android.graphics.Typeface.BOLD);
 
         bottomBar.addView(btnHistory);
@@ -118,9 +120,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(bottomBar, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        // 6. BUTTONS KI WORKING (CLICK LOGIC)
-        
-        // Home Button Click (Wapas main screen par aane ke liye)
+        // 6. ACTION INTERACTION LISTENERS
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,91 +129,72 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Top Search Icon Par Click Karne Par Google Khule
-        iconSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openWebsite("https://www.google.com");
-            }
-        });
-
         setContentView(mainLayout);
     }
 
-    // Top Bar ke Icons styling ke liye helper function
     private TextView createTopIcon(String iconStr) {
         TextView tv = new TextView(this);
         tv.setText(iconStr);
-        tv.setTextColor(Color.parseColor("#40E0D0"));
-        tv.setTextSize(18);
-        tv.setPadding(20, 10, 20, 10);
+        tv.setTextColor(Color.parseColor("#4DEEEA"));
+        tv.setTextSize(20);
+        tv.setPadding(30, 10, 30, 10);
         return tv;
     }
 
-    // Bottom Navigation Buttons styling ke liye helper function
     private TextView createNavButton(String text, String colorHex) {
         TextView tv = new TextView(this);
         tv.setText(text);
         tv.setTextColor(Color.parseColor(colorHex));
-        tv.setTextSize(22);
+        tv.setTextSize(20);
         tv.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         tv.setLayoutParams(params);
         return tv;
     }
 
-    // Grid ke andar modern rounded app icons design karne ke liye function
-    private void addAppIcon(GridLayout grid, String emoji, final String name, final String url) {
-        LinearLayout box = new LinearLayout(this);
-        box.setOrientation(LinearLayout.VERTICAL);
-        box.setGravity(Gravity.CENTER);
-        box.setPadding(30, 30, 30, 30);
+    private void addAppIcon(GridLayout grid, String glyph, final String name, final String url, String accentColor) {
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setGravity(Gravity.CENTER);
+        container.setPadding(35, 40, 35, 40);
 
-        // Icon Box (Sleek Dark Rounded Square)
-        TextView iconView = new TextView(this);
-        iconView.setText(emoji);
-        iconView.setTextSize(28);
-        iconView.setGravity(Gravity.CENTER);
-        iconView.setWidth(150);
-        iconView.setHeight(150);
+        // Core App Square Frame (Highly Uniform Vector Look)
+        TextView itemFrame = new TextView(this);
+        itemFrame.setText(glyph);
+        itemFrame.setTextSize(24);
+        itemFrame.setTextColor(Color.parseColor("#4DEEEA"));
+        itemFrame.setGravity(Gravity.CENTER);
+        
+        // Exact sizing bounds to enforce grid consistency
+        LinearLayout.LayoutParams frameParams = new LinearLayout.LayoutParams(160, 160);
+        itemFrame.setLayoutParams(frameParams);
 
-        GradientDrawable shape = new GradientDrawable();
-        shape.setColor(Color.parseColor("#0B131A")); // App box background
-        shape.setCornerRadius(35f); // Soft edges
-        iconView.setBackground(shape);
+        GradientDrawable cardShape = new GradientDrawable();
+        cardShape.setColor(Color.parseColor("#091117")); 
+        cardShape.setCornerRadius(40f); 
+        itemFrame.setBackground(cardShape);
 
-        // App Name Text
-        TextView textView = new TextView(this);
-        textView.setText(name);
-        textView.setTextColor(Color.parseColor("#80FFFFFF")); // Clean fade-white text
-        textView.setTextSize(12);
-        textView.setPadding(0, 15, 0, 0);
-        textView.setGravity(Gravity.CENTER);
+        // Vector Sub-text styling
+        TextView label = new TextView(this);
+        label.setText(name);
+        label.setTextColor(Color.parseColor("#5F727D")); 
+        label.setTextSize(13);
+        label.setPadding(0, 18, 0, 0);
+        label.setGravity(Gravity.CENTER);
 
-        box.addView(iconView);
-        box.addView(textView);
+        container.addView(itemFrame);
+        container.addView(label);
 
-        // Icon Par Click Karne Par Website Load Ho
-        box.setOnClickListener(new View.OnClickListener() {
+        container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebsite(url);
+                homeScreenLayout.setVisibility(View.GONE);
+                myWebView.setVisibility(View.VISIBLE);
+                myWebView.loadUrl(url);
             }
         });
 
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.width = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        box.setLayoutParams(params);
-
-        grid.addView(box);
-    }
-
-    // Website Open Karne Ka Logic
-    private void openWebsite(String url) {
-        homeScreenLayout.setVisibility(View.GONE);
-        myWebView.setVisibility(View.VISIBLE);
-        myWebView.loadUrl(url);
+        grid.addView(container);
     }
 
     @Override
@@ -229,4 +210,4 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-    }
+            }
